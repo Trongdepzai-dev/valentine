@@ -116,17 +116,39 @@
 
     <script>
       /* --------------- HIỆU ỨNG EMOJI RƠI --------------- */
-      function createFallingEmojis() {
+   function createFallingEmojis() {
         const emojiContainer = document.createElement("div");
         emojiContainer.className = "emoji";
         emojiContainer.textContent = "💖";
-        emojiContainer.style.left = Math.random() * 100 + "vw"; // Vị trí ngẫu nhiên
-        emojiContainer.style.animationDuration = Math.random() * 2 + 3 + "s"; // Thời gian rơi ngẫu nhiên
+
+        // Vị trí ngang và top ngẫu nhiên
+        emojiContainer.style.left = Math.random() * 100 + "vw";
+        emojiContainer.style.top = Math.random() * 10 + "vh";
+
+        // Tốc độ rơi chậm hơn: random từ 10 đến 15 giây
+        const duration = Math.random() * 5 + 10;
+        emojiContainer.style.animationDuration = `${duration}s`;
+
+        // Điều chỉnh kích thước trái tim theo thiết bị:
+        let minSize, maxSize;
+        if (window.innerWidth < 768) {
+          minSize = 10;
+          maxSize = 18;
+        } else {
+          minSize = 12;
+          maxSize = 24;
+        }
+        emojiContainer.style.fontSize =
+          Math.random() * (maxSize - minSize) + minSize + "px";
+
         document.body.appendChild(emojiContainer);
-        setTimeout(() => emojiContainer.remove(), 5000);
+        // Gỡ bỏ emoji sau khi animation kết thúc
+        setTimeout(() => emojiContainer.remove(), duration * 1000);
       }
 
-      setInterval(createFallingEmojis, 300); // Tạo emoji mỗi 300ms
+      // Giảm tần suất tạo emoji trên mobile để giảm độ “dày đặc”
+      const intervalTime = window.innerWidth < 768 ? 500 : 200;
+      setInterval(createFallingEmojis, intervalTime);
 
       /* --------------- HIỆU ỨNG PHÁO HOA --------------- */
       function createExplosionAt(corner) {
