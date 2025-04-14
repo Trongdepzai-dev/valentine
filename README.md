@@ -21,7 +21,7 @@ This project is built using simple yet powerful web technologies:
 
 ## How to View
 
-To experience "Will You Be My Valentine?", simply visit [https://byquangthanh.github.io/valentine.github.io/]([https://byquangthanh.github.io/valentine.github.io/](https://trongdepzai-dev.github.io/valentine/)) from any modern web browser.
+To experience "Will You Be My Valentine?", simply visit [[https://byquangthanh.github.io/valentine.github.io/]([](https://trongdepzai-dev.github.io/valentine/)https://byquangthanh.github.io/valentine.github.io/](https://trongdepzai-dev.github.io/valentine/)) from any modern web browser.
 
 ## How to Contribute
 
