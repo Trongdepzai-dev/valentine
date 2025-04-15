@@ -10,8 +10,10 @@
       body::before {
         content: "";
         position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         background: url('sparkle.png') repeat;
         opacity: 0.2;
         pointer-events: none;
@@ -50,11 +52,11 @@
       }
       @keyframes explode {
         from {
-          transform: translate(0, 0);
+          transform: translate3d(0, 0, 0);
           opacity: 1;
         }
         to {
-          transform: translate(var(--dx), var(--dy));
+          transform: translate3d(var(--dx), var(--dy), 0);
           opacity: 0;
         }
       }
@@ -116,7 +118,7 @@
 
     <script>
       /* --------------- HIỆU ỨNG EMOJI RƠI --------------- */
-   function createFallingEmojis() {
+      function createFallingEmojis() {
         const emojiContainer = document.createElement("div");
         emojiContainer.className = "emoji";
         emojiContainer.textContent = "💖";
@@ -125,11 +127,11 @@
         emojiContainer.style.left = Math.random() * 100 + "vw";
         emojiContainer.style.top = Math.random() * 10 + "vh";
 
-        // Tốc độ rơi chậm hơn: random từ 10 đến 15 giây
+        // Tốc độ rơi: random từ 10 đến 15 giây
         const duration = Math.random() * 5 + 10;
         emojiContainer.style.animationDuration = `${duration}s`;
 
-        // Điều chỉnh kích thước trái tim theo thiết bị:
+        // Điều chỉnh kích thước theo thiết bị:
         let minSize, maxSize;
         if (window.innerWidth < 768) {
           minSize = 10;
@@ -142,11 +144,11 @@
           Math.random() * (maxSize - minSize) + minSize + "px";
 
         document.body.appendChild(emojiContainer);
-        // Gỡ bỏ emoji sau khi animation kết thúc
+        // Xóa emoji sau khi animation kết thúc
         setTimeout(() => emojiContainer.remove(), duration * 1000);
       }
 
-      // Giảm tần suất tạo emoji trên mobile để giảm độ “dày đặc”
+      // Giảm tần suất tạo emoji trên mobile để giảm “dày đặc”
       const intervalTime = window.innerWidth < 768 ? 500 : 200;
       setInterval(createFallingEmojis, intervalTime);
 
@@ -154,14 +156,18 @@
       function createExplosionAt(corner) {
         const numParticles = 80;
         const colors = ["#ff6ec7", "#ff9a9e", "#fad0c4", "#fbc2eb", "#a18cd1"];
+        // Tính vị trí pixel của góc
+        const posX = Math.floor(window.innerWidth * corner.x);
+        const posY = Math.floor(window.innerHeight * corner.y);
+
         for (let i = 0; i < numParticles; i++) {
           const particle = document.createElement("div");
           particle.className = "firework-particle";
           particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
           const size = Math.random() * 10 + 10;
           particle.style.width = particle.style.height = size + "px";
-          particle.style.left = corner.x;
-          particle.style.top = corner.y;
+          particle.style.left = posX + "px";
+          particle.style.top = posY + "px";
           const angle = Math.random() * Math.PI * 2;
           const distance = Math.random() * 300 + 50;
           const dx = Math.cos(angle) * distance;
@@ -174,11 +180,12 @@
       }
 
       function triggerFireworks() {
+        // Các góc được xác định theo tỷ lệ (0.05 tương đương 5%)
         const corners = [
-          { x: "5%",  y: "5%" },
-          { x: "95%", y: "5%" },
-          { x: "5%",  y: "90%" },
-          { x: "95%", y: "90%" }
+          { x: 0.05, y: 0.05 },
+          { x: 0.95, y: 0.05 },
+          { x: 0.05, y: 0.90 },
+          { x: 0.95, y: 0.90 }
         ];
         corners.forEach(corner => createExplosionAt(corner));
       }
@@ -192,7 +199,8 @@
       }
       function noAction() {
         const yesBtn = document.getElementById("yesButton");
-        const currentFontSize = parseInt(window.getComputedStyle(yesBtn).fontSize);
+        // Sử dụng parseFloat để lấy giá trị chính xác, kể cả phần thập phân
+        const currentFontSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
         yesBtn.style.fontSize = (currentFontSize + 10) + "px";
       }
     </script>
