@@ -42,3 +42,4 @@ Nếu bạn muốn chạy dự án trên máy tính cá nhân, hãy làm theo c�
    Fork và clone repository từ GitHub:
    ```bash
    git clone https://github.com/byquangthanh/valentine.github.io.git
+   And run file index.html
