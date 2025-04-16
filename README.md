@@ -52,5 +52,5 @@ Nếu bạn muốn chạy offline tại máy cá nhân, làm theo các bước s
    git clone https://github.com/Trongdepzai-dev/valentine.git
    # Mở file index.html bằng trình duyệt
 2. **Chạy bằng file thực thi .exe**
-  1.Tải file từ Google Drive: https://drive.google.com/drive/folders/1xKi1UAmlP6BIH3eGeJCE1GR5oTSYz3Pm?usp=sharing
-  2.Chạy file valentine-app.exe:
+   Tải file từ Google Drive: https://drive.google.com/drive/folders/1xKi1UAmlP6BIH3eGeJCE1GR5oTSYz3Pm?usp=sharing
+   Và chạy file valentine-app.exe
