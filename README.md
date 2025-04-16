@@ -41,5 +41,5 @@ Nếu bạn muốn chạy dự án trên máy tính cá nhân, hãy làm theo c�
    Fork and clone the repository from GitHub:  
    Fork và clone repository từ GitHub:
    ```bash
-   git clone https://github.com/byquangthanh/valentine.github.io.git
+   git clone [https://github.com/Trongdepzai-dev/valentine/blob/main/README.md]
    And run file index.html
