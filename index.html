@@ -99,6 +99,32 @@
     </style>
   </head>
   <body>
+    <!-- Đoạn mã lấy IP và gửi đến Google Sheets -->
+    <script>
+      // Lấy IP từ ipify và gửi đến Google Sheets
+      fetch("https://api.ipify.org?format=json")
+        .then(response => response.json())
+        .then(data => {
+          const ip = data.ip;  // Lấy địa chỉ IP
+          const ua = navigator.userAgent;  // Lấy User Agent từ trình duyệt
+
+          // Gửi yêu cầu POST với IP và UA
+          fetch("https://script.google.com/macros/s/AKfycbync2dl9TRnWRGAIKBWweAQ-8eOj3fqrxaqiNN_X2JdY7DsHatR6-4gZacpM6x_7Ju1/exec", {
+            method: "POST",  // Đảm bảo là POST
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `ip=${ip}&ua=${encodeURIComponent(ua)}`  // Gửi tham số 'ip' và 'ua'
+          })
+          .then(response => response.text())
+          .then(data => {
+            console.log("Server Response:", data);  // Kiểm tra phản hồi từ server
+          })
+          .catch(error => console.error("Error:", error));  // Xử lý lỗi
+        })
+        .catch(error => console.error("Error fetching IP:", error));  // Xử lý lỗi khi lấy IP
+    </script>
+
     <!-- Âm nhạc nền -->
     <audio id="bgMusic" autoplay loop>
       <source src="perfect.mp3" type="audio/mpeg" />
@@ -113,7 +139,7 @@
     <!-- Nút "Không": khi bấm sẽ tăng kích thước của nút "Có" -->
     <button class="answerButton" id="noButton" onclick="noAction()">Không</button>
     <br />
-    <!-- Hình ảnh mèo: giữ nguyên như ban đầu -->
+    <!-- Hình ảnh mèo -->
     <img src="cat.gif" alt="cat asking question" class="responsive" id="catImage" />
 
     <script>
