@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACCESS DENIED :: SECURITY PROTOCOL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="background-canvas"></canvas>
+
+    <div class="overlay">
+        <div class="container">
+            <div class="header">
+                <i class="fas fa-shield-virus fa-beat icon-large" style="--fa-beat-scale: 1.05;"></i>
+                <h1 id="main-heading">GEOLOCATION DENIED</h1>
+            </div>
+
+            <div id="status-panel" class="status-panel">
+                 <div class="status-item">
+                    <span class="label">[System_Status]</span>
+                    <span id="system-status" class="value status-critical">UNAUTHORIZED</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">[Security_Level]</span>
+                    <span id="security-level" class="value status-warning">ALERT</span>
+                </div>
+                 <div class="status-item">
+                    <span class="label">[Active_Protocol]</span>
+                    <span id="system-action" class="value status-info typing-effect"></span>
+                </div>
+            </div>
+
+            <div id="hacker-progress-container" class="hacker-progress-container hidden"> <div class="progress-label">// Engaging Containment Field //</div>
+                 <pre id="hacker-progress-bar" class="hacker-progress-bar"></pre>
+                 <div id="progress-percentage" class="progress-percentage">0%</div>
+            </div>
+
+            <div id="final-stage-area" class="final-stage-area hidden">
+                <div id="countdown-timer" class="countdown-timer"></div>
+                <button id="promise-button" class="promise-button hidden">TÔI SẼ CẤP QUYỀN VỊ TRÍ</button>
+            </div>
+
+
+            <div class="log-container">
+                <div class="log-header">[System.Log]</div>
+                <pre id="log-output"></pre>
+            </div>
+
+        </div>
+         <button id="fullscreen-btn" class="fullscreen-btn" title="Enter Fullscreen">FS</button>
+    </div>
+
+    <script src="dynamic_script.js"></script>
+</body>
+</html>

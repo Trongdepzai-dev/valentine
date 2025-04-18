@@ -1,0 +1,263 @@
+/* styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&display=swap');
+
+:root {
+    /* Bảng màu Tối Hơn / Hacker */
+    --color-background: #030303; /* Đen gần tuyệt đối */
+    --color-primary: #e01a1a; /* Đỏ đậm hơn */
+    --color-secondary: #d95a00; /* Cam đậm hơn */
+    --color-accent: #00b336; /* Xanh lá đậm hơn */
+    --color-text: #a0a0a0; /* Xám tối hơn */
+    --color-text-muted: #555555;
+    --color-panel-bg: rgba(5, 8, 5, 0.65); /* Nền panel tối, ít trong hơn */
+    --color-panel-border: rgba(0, 179, 54, 0.25); /* Viền mờ hơn */
+    --color-glow: rgba(224, 26, 26, 0.4); /* Glow yếu hơn */
+    --color-progress: var(--color-accent);
+
+    /* Fonts */
+    --font-main: 'Source Code Pro', monospace; /* Font chính */
+
+    /* Biến hiệu ứng */
+    --glitch-intensity: 0;
+    --border-flicker-speed: 2s;
+
+    font-size: 16px; /* Giảm nhẹ cỡ chữ cơ bản */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-main); /* Áp dụng font chính */
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; overflow: hidden; position: relative;
+    cursor: none; /* <<< ẨN CON TRỎ CHUỘT */
+}
+
+/* Canvas và Overlay */
+#background-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.6; } /* Giảm opacity nền */
+.overlay { position: relative; z-index: 1; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; padding: 10px; }
+
+/* Container */
+.container {
+    background-color: var(--color-panel-bg);
+    border: 1px solid var(--color-panel-border);
+    padding: 20px 30px;
+    border-radius: 0px;
+    max-width: 800px; /* Giảm nhẹ chiều rộng */
+    width: 95%;
+    box-shadow: 0 0 15px rgba(0, 179, 54, 0.1), inset 0 0 8px rgba(0, 0, 0, 0.7); /* Shadow tối hơn */
+    backdrop-filter: blur(2px); /* Blur nhẹ hơn */
+    animation: border-flicker var(--border-flicker-speed) infinite alternate;
+}
+@keyframes border-flicker {
+    0% { border-color: var(--color-panel-border); box-shadow: 0 0 15px rgba(0, 179, 54, 0.1), inset 0 0 8px rgba(0, 0, 0, 0.7); }
+    100% { border-color: rgba(0, 179, 54, 0.4); box-shadow: 0 0 20px rgba(0, 179, 54, 0.2), inset 0 0 8px rgba(0, 0, 0, 0.7); } /* Nháy sáng nhẹ hơn */
+}
+
+/* Header */
+.header {
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; border-bottom: 1px dashed var(--color-panel-border);
+    padding-bottom: 15px;
+}
+.icon-large {
+    font-size: 2.2em; color: var(--color-primary); margin-right: 15px;
+    text-shadow: 0 0 8px var(--color-glow);
+}
+h1 {
+    font-family: var(--font-main); font-weight: 600; /* Đậm hơn chút */
+    font-size: 2.3em; color: var(--color-primary);
+    text-transform: uppercase; text-shadow: 0 0 6px var(--color-glow);
+    letter-spacing: 2px; position: relative;
+}
+
+/* Status Panel */
+.status-panel {
+    background: rgba(0,0,0,0.4); padding: 15px; margin-bottom: 20px;
+    border: 1px solid rgba(0, 179, 54, 0.15);
+}
+.status-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 1.1em; }
+.status-item:last-child { margin-bottom: 0; }
+.label { color: var(--color-text-muted); margin-right: 10px; font-size: 0.9em; } /* Nhỏ hơn */
+.value { font-weight: 600; text-align: right; font-family: var(--font-main); font-size: 1.1em;}
+/* Status Colors */
+.status-critical { color: var(--color-primary); text-shadow: 0 0 4px var(--color-primary); }
+.status-warning { color: var(--color-secondary); text-shadow: 0 0 4px var(--color-secondary); }
+.status-info { color: var(--color-accent); text-shadow: 0 0 4px var(--color-accent); }
+.status-stable { color: #3ae374; text-shadow: 0 0 4px #3ae374; }
+/* Typing Effect */
+.typing-effect::after { content: '█'; display: inline-block; animation: blink-caret 0.7s infinite steps(1); margin-left: 2px; opacity: 1; color: var(--color-accent); font-weight: normal;}
+@keyframes blink-caret { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* Hacker Progress Bar */
+.hacker-progress-container {
+    margin-bottom: 20px;
+    border: 1px dashed var(--color-panel-border);
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.3);
+    position: relative;
+    transition: opacity 0.5s ease-in-out; /* Thêm transition */
+}
+.progress-label {
+    font-size: 0.9em; color: var(--color-text-muted);
+    margin-bottom: 4px; text-align: left;
+}
+.hacker-progress-bar {
+    font-family: var(--font-main);
+    font-size: 1.1em; /* Nhỏ hơn chút */
+    color: var(--color-progress);
+    background-color: rgba(0,0,0,0.5); /* Nền tối hơn */
+    padding: 1px 3px;
+    overflow: hidden; white-space: pre;
+    text-shadow: 0 0 2px var(--color-progress);
+    border: none; /* Bỏ border trong */
+    line-height: 1.2;
+}
+.hacker-progress-bar span { color: #333; text-shadow: none; } /* Ký tự rỗng tối hơn */
+.progress-percentage {
+    position: absolute; top: 8px; right: 12px;
+    font-size: 0.9em; color: var(--color-accent);
+    font-family: var(--font-main); font-weight: 600;
+}
+
+/* Final Countdown Section */
+.final-stage-area { /* Đổi tên class */
+    margin-top: 15px;
+    padding: 12px;
+    border: 1px solid var(--color-primary);
+    background-color: rgba(224, 26, 26, 0.1); /* Nền đỏ nhẹ */
+    text-align: center;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: scaleY(0.8); /* Hiệu ứng xuất hiện khác */
+    opacity: 0;
+    /* visibility: hidden; */ /* Dùng opacity và pointer-events thay thế display/visibility */
+    pointer-events: none;
+}
+.final-stage-area.visible {
+    opacity: 1;
+    transform: scaleY(1);
+    /* visibility: visible; */
+    pointer-events: auto;
+}
+.countdown-timer {
+    font-size: 1.6em; /* Nhỏ hơn */
+    color: var(--color-primary);
+    margin-bottom: 12px;
+    text-shadow: 0 0 6px var(--color-glow);
+    font-family: var(--font-main); font-weight: 600;
+    /* Animation pulse sẽ được thêm bởi JS nếu cần */
+}
+.promise-button {
+    font-family: var(--font-main); font-weight: 600;
+    font-size: 1.1em; padding: 8px 15px; /* Nhỏ hơn */
+    background-color: var(--color-accent);
+    color: #000; /* Chữ đen trên nền xanh */
+    border: none; cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 8px rgba(0, 179, 54, 0.4);
+    opacity: 0; /* Bắt đầu ẩn */
+    pointer-events: none; /* Bắt đầu không thể click */
+    transform: translateY(10px);
+}
+.promise-button.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+.promise-button:hover {
+    background-color: #fff; color: #000;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+}
+.promise-button:active { transform: scale(0.96) translateY(0); }
+
+
+/* Log Container */
+.log-container { margin-top: 20px; }
+.log-header {
+    font-family: var(--font-main); text-transform: none;
+    font-size: 0.9em; color: var(--color-text-muted); margin-bottom: 6px;
+    text-align: left; border-bottom: 1px solid var(--color-panel-border);
+    padding-bottom: 4px;
+}
+#log-output {
+    background-color: rgba(0, 0, 0, 0.5); /* Nền log tối hơn */
+    border: 1px solid var(--color-panel-border);
+    height: 160px; overflow-y: scroll; text-align: left; padding: 10px;
+    font-family: var(--font-main); /* Dùng font chính cho đồng bộ */
+    font-size: 0.95em; /* Cỡ chữ log */
+    color: var(--color-accent); /* Màu xanh lá */
+    white-space: pre-wrap; word-wrap: break-word; border-radius: 0px;
+    scrollbar-width: thin; scrollbar-color: var(--color-accent) transparent;
+    line-height: 1.5; /* Giữ khoảng cách dòng */
+    /* text-shadow: 0 0 1px rgba(0, 179, 54, 0.6); */ /* Bỏ shadow nếu muốn rõ hơn */
+}
+/* Webkit scrollbar */
+#log-output::-webkit-scrollbar { width: 5px; }
+#log-output::-webkit-scrollbar-track { background: transparent; }
+#log-output::-webkit-scrollbar-thumb { background-color: var(--color-accent); border-radius: 0px; }
+
+/* Fullscreen Button */
+.fullscreen-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-text-muted);
+    font-family: var(--font-main);
+    font-size: 0.8em;
+    padding: 2px 5px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+}
+.fullscreen-btn:hover {
+    opacity: 1;
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+
+/* Utility Classes */
+.hidden {
+    /* Dùng opacity và pointer-events để có transition */
+    opacity: 0 !important;
+    pointer-events: none !important;
+    /* visibility: hidden; */ /* Tránh dùng visibility nếu muốn transition */
+}
+.visible {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    /* visibility: visible; */
+}
+
+
+/* Glitch Effect CSS (giữ nguyên logic) */
+/* ... (giữ nguyên @keyframes glitch-anim-1/2 và các class .glitch-target) ... */
+.glitch-target { position: relative; }
+.glitch-target.glitch-active::before,
+.glitch-target.glitch-active::after {
+    content: attr(data-text); position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: var(--color-panel-bg); overflow: hidden;
+    opacity: calc(var(--glitch-intensity) * 0.7); /* Giảm opacity glitch */
+    filter: contrast(2); /* Tăng contrast để rõ hơn trên nền tối */
+}
+.glitch-target.glitch-active::before {
+    left: calc(var(--glitch-intensity) * 3px - 1.5px);
+    text-shadow: -1px 0 var(--color-secondary);
+    animation: glitch-anim-1 0.1s infinite linear alternate-reverse;
+    clip-path: inset(40% 0 40% 0);
+}
+.glitch-target.glitch-active::after {
+    left: calc(var(--glitch-intensity) * -3px + 1.5px);
+    text-shadow: 1px 0 var(--color-accent);
+    animation: glitch-anim-2 0.08s infinite linear alternate-reverse;
+    clip-path: inset(60% 0 20% 0);
+}
+@keyframes glitch-anim-1 { 0%{clip-path:inset(40% 0 40% 0);} 100%{clip-path:inset(50% 0 30% 0);} }
+@keyframes glitch-anim-2 { 0%{clip-path:inset(60% 0 20% 0);} 100%{clip-path:inset(30% 0 50% 0);} }
